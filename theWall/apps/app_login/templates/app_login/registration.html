@@ -1,0 +1,134 @@
+
+<html>
+    <head>
+        <title>Register and Login</title>
+        <link href="https://fonts.googleapis.com/css?family=Teko&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        {% load static %}
+       
+        <script src="{% static 'app_name/js/script.js' %}"></script>    
+        <script>
+            //Configuration
+               var minEmailLen = 2, maxEmailLen = 30;
+               var minPasswordLen = 8, maxPasswordLen = 4096;
+               var emailMsg = "email must be between " + minEmailLen + " and " +
+                                 maxEmailLen + " characters, inclusive.";
+               var passwordMsg = "Password must be between " + minPasswordLen + " and " +
+                                 maxPasswordLen + " characters, inclusive.";
+               jQuery.validator.setDefaults({
+                  debug: true,      //Avoids form submit. Comment when in production.
+                  success: "valid",
+                  submitHandler: function() {
+                     alert("Thank you!");
+                  }
+               });
+            $(document).ready(function() {
+               // validate signup form on keyup and submit
+               $("#form_val").validate({
+                  rules: {
+                     email: {
+                        required: true,
+                        minlength: minEmailLen,
+                        maxlength: maxEmailLen
+       
+                     },
+                     password: {
+                        required: true,
+                        minlength: minPasswordLen,
+                        maxlength: maxPasswordLen
+       
+                     },
+                  },
+                  messages: {
+                     email: {
+                        required: "Email is required",
+                        minlength: usernameMsg,
+                        maxlength: usernameMsg
+                     },
+                     password: {
+                        required: "Password required",
+                        minlength: passwordMsg,
+                        maxlength: passwordMsg
+                     }
+                  }
+               });
+            });
+         </script>    
+    </head>
+      <body class="bg-light">
+            <div class="container">
+       
+          
+            <div class="col-md-8 order-md-1">
+              <!--NEED TO EDIT THIS BACK BUTTON-->
+              <div class="go_back_button float-right"><a href="/shows">Go Back</a></div>
+
+
+              <!--FORM BEGIN-->
+              <div class="container">
+                <div class="row">
+                   <div class="col">
+                      <form id="form_val" action="/register" method="POST">
+                        <h2>Registration</h2>
+                        {% csrf_token %}
+                            <div class="form-group">
+                               <div class="col-xs-6"><input type="text" class="form-control" name="first_name" placeholder="First Name" required="required"></div>
+                            </div>
+                            <div class="form-group">
+                              <div class="col-xs-6"><input type="text" class="form-control" name="last_name" placeholder="Last Name" required="required"></div>
+                            </div>
+                            <div class="form-group">
+                              <input type="email" class="form-control" name="email" placeholder="Email" required="required">
+                            </div>
+                            <div class="form-group">
+                              <input type="password" class="form-control" name="password" placeholder="Password" required="required">
+                            </div>
+                            <div class="form-group">
+                              <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
+                            </div>        
+                            <div class="form-group">
+                              <button type="submit" class="btn btn-success btn-lg btn-block">Register</button>
+                            </div>
+                      </form>
+                  </div>
+                <!--REGISTRATION END-->
+      <!---LOGIN FORM BEGIN-->
+
+                  <div class="col">
+                    <form action="/logme" method="POST">
+                      <h2>Login</h2>
+                      {% csrf_token %}
+                        <div class="form-group">
+                          <input type="email" class="form-control" name="email" placeholder="Email" required="required">
+                        </div>
+                        
+                        <div class="form-group">
+                          <input type="password" class="form-control" name="password" placeholder="Password" required="required">
+                        </div>
+                             
+                        <div class="form-group">
+                          <button type="submit" class="btn btn-success btn-lg btn-block">Login</button>
+                        </div>
+                        <!--ERROR MESSAGE OUTPUT-->
+                        {% if messages %}
+                        <ul class="messages">    
+                        {% for message in messages %}    
+                       <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                       {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </form>
+        <!---LOGIN FORM END-->
+                </div>
+              </div>
+          </div>
+              
+          <footer class="my-5 pt-5 text-muted text-center text-small">
+        </footer>
+        </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

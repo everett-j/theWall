@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <title>TV SHOWS: edit</title>
+        <link href="https://fonts.googleapis.com/css?family=Teko&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'ninja2/css/style.css' %}">    
+        <script src="{% static 'app_name/js/script.js' %}"></script>        
+    </head>
+      <body class="bg-light">
+            <div class="container">
+              
+          
+            <div class="col-md-8 order-md-1">
+              <!--NEED TO EDIT THIS BACK BUTTON-->
+              <div class="go_back_button float-right"><a href="/shows/new">Go Back</a></div>
+              <h4 class="mb-3">Edit Show </h4>
+              <h4 class="mb-3">{{ shows.id }}</h4>
+              <form class="needs-validation" action="/update_show/{{ shows.id }}" method="POST">
+                <input type="hidden" name="id" value="{{ shows.id }}">
+                  {% csrf_token %}
+                <div class="mb-3 col-md-8">
+                  <label for="title">Title</label>
+                  <input type="text" class="form-control" value="{{ shows.title }}" name="title" >
+                 
+                </div>
+                
+                <div class="row">
+                  <div class="col-md-4 mb-3">
+                    <label for="network">Network</label>
+                    <input type="text" class="form-control" name="network" placeholder="" value="{{ shows.network }}">
+                    
+                  </div>
+                  <div class="col-md-4 mb-3">
+                    <label for="release">Release Date</label>
+                    <input input class="form-control" type="text" name="release" value="{{ shows.release }}">
+                    
+                    </div>
+                  </div>
+                </div>
+        
+                        
+                <div class="mb-3">
+                  <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control mb-3 w-50" type="text" name="description" rows="3" value="{{ shows.description }}">{{ shows.description }}</textarea>
+                  </div>
+                </div>
+        
+                <hr class="mb-4">
+
+               <!--BUTTON FUNCTIONALITY TO ADD NEW SHOW-->
+                <button class="btn btn-primary btn-sm btn-block w-25" type="submit">Update</button>
+              </form>
+            </div>
+          </div>
+          <!--ERROR MESSAGES-->
+          {% if messages %}
+          <ul class="messages error_red">    
+              {% for message in messages %}    
+                  <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+              {% endfor %}
+          </ul>
+          {% endif %}
+          <!--END ERROR MESSAGES-->
+        
+          <footer class="my-5 pt-5 text-muted text-center text-small">
+        </footer>
+        </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

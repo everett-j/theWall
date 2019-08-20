@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>TV SHOWS: Show Details</title>
+        <link href="https://fonts.googleapis.com/css?family=Teko&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'ninja2/css/style.css' %}">    
+        <script src="{% static 'app_name/js/script.js' %}"></script>   
+        <style>
+          .padding_20{
+            padding: 20px;
+          }
+            
+            </style>     
+    </head>
+      <body class="bg-light">
+       
+        
+            <div class="container">
+
+          
+            <div class="col-md-8 order-md-1">
+               <!--NEED TO EDIT THIS BACK BUTTON-->
+                <div class="go_back_button float-right"><a href="/shows/new">Go Back</a></div>
+            
+              <h4 class="mb-3">{{ shows.title }} </h4>
+              <h4 class="mb-3"><!--INSERT SHOW_ID NUMBER-->ID: {{ shows.id }}</h4>
+              <form class="needs-validation" novalidate>
+                
+                <div class="mb-3 col-md-22">
+                    <table class="table table table-striped">
+                        <thead class="thead-dark">
+                          <tr>
+                            <th scope="col">Title:</th>
+                            <td>{{shows.title}}</td>
+                          </tr>
+                          <tr>
+                              <th scope="col">Network:</th>
+                              <td>{{shows.network}}</td>
+                          </tr>
+                          <tr>
+                              <th scope="col">Release Date::</th>
+                              <td>{{shows.release}}</td>
+                          </tr>
+                          <tr>
+                              <th scope="col">Description:</th>
+                              <td>{{shows.description}}</td>
+                          </tr>
+                      </table>
+                      <!--UPDATE THIS LINE WITH LAST UPDATED FIELD-->
+                      <div class="container padding_20">
+                      Last Updated: {{  shows.updated_at }}
+                      </div>
+                      <div class="container padding_20">
+                      <!--EDIT THIS LINK TO GO TO ADD A NEW SHOW PAGE-->
+                      <a href="/shows/{{ shows.id }}/edit">Edit</a> | <a href="/delete/{{ shows.id }}">Delete</a> 
+                      </div>
+          </div>
+        
+          <footer class="my-5 pt-5 text-muted text-center text-small">
+        </footer>
+        </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

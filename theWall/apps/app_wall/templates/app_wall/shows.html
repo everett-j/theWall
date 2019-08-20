@@ -1,0 +1,121 @@
+<html>
+    <head>
+        <title>TV SHOWS</title>
+        <link href="https://fonts.googleapis.com/css?family=Teko&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'ninja2/css/style.css' %}">    
+        <script src="{% static 'app_name/js/script.js' %}"></script>        
+    </head>
+      <body class="bg-light">
+       
+        
+            <div class="container">
+
+          
+            <div class="col-md-12 order-md-1">
+               <!--NEED TO EDIT THIS BACK BUTTON-->
+                <div class="go_back_button float-right"><a href="/shows/new">Go Back</a></div>
+              <h4 class="mb-3">All Shows</h4>
+              <form class="needs-validation" novalidate>
+                {{shows.title}}
+                <div class="mb-3 col-md-22">
+                    <table class="table table table-striped">
+                        <thead class="thead-dark">
+                           
+                           <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Network</th>
+                            <th scope="col">Release Date</th>
+                            <th scope="col">Actions</th>
+                            <th scope="col">Buy Gear</th>
+                          </tr>
+                        
+                        </thead>
+                        <tbody>
+                          {% for shows in shows_all %}
+                          <tr>
+                              <th scope="col">{{shows.id}}</th>
+                              <th scope="col">{{shows.title}}</th>
+                              <th scope="col">{{shows.network}}</th>
+                              <th scope="col">{{shows.release}}</th>
+                              <td><a href="/shows/{{ shows.id }}">Show</a> | <a href="/shows/{{ shows.id }}/edit">Edit</a> | <a href="/delete/{{ shows.id }}">Delete</a> </td>
+                              
+                              <!--BUY NOW BUTTON-->
+                              <th scope="col"><button type="button" data-toggle="modal" data-target="#button_buy{{shows.id}}" class="btn btn-outline-dark btn-sm">Buy Now</button>
+                              
+                                <!-- BEGIN OF MODAL DIV-->
+<div class="modal fade" id="button_buy{{shows.id}}" tabindex="-1" role="dialog" aria-labelledby="button_buy{{shows.id}}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="button_buy{{shows.id}}">{{shows.title}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/checkout" method="POST">
+          {% csrf_token %}
+      <div class="modal-body">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">Item</th>
+              <th scope="col">Price</th>
+              <th scope="col">Qty</th>
+            </tr>
+          </thead>
+          <tbody>
+              {% for display in store %}
+            <tr>
+              <td>{{display.items}}</td>
+              <td >$ {{display.price}}</td>
+              <input type="hidden" value="{{display.id}}" name="hidden">
+              <td> <select class="d-inline-block" name="quantity">
+                  {% for x in '123456789'|make_list %}
+                  <option value="{{x}}">{{x}}</option>
+                  {% endfor %}
+              </select></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Purchase Now!</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+        <!--END OF MODAL DIV-->
+                              
+                              
+                              
+                              </th> <!-- END OF TABLE BUTTON-->
+                          </tr>
+                          
+
+                          {% endfor %}
+
+                        </tbody>
+                      </table>
+                      <!--EDIT THIS LINK TO GO TO ADD A NEW SHOW PAGE-->
+                      <a href="/shows/new">Add a New Show</a> 
+                      
+          </div>
+
+          
+          <footer class="my-5 pt-5 text-muted text-center text-small">
+        </footer>
+        </div>
+
+
+       
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
