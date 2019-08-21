@@ -1,11 +1,71 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from .models import *
 from django.contrib import messages
 import bcrypt
     
 def index(request):
-  
-    return render(request, 'app_wall/index.html')
+    try:
+        context = {
+             "users" : request.session["id"]  
+        }
+        return render(request, 'app_wall/index.html', context)
+    except:
+        return render(request, 'app_login/denied.html')
+
+
+def wall(request):
+    try:
+        context = {
+             "users" : request.session["id"],
+             "message_scroll": Messages.objects.all(),
+             "comment_scroll": Comments.objects.all()
+        }
+        return render(request, 'app_wall/index.html', context)
+    except:
+        return render(request, 'app_login/denied.html')
+
+#POST TO WALL FUNCTION
+def wall_post( request):
+    user_id = int(request.session["id"])
+    user_id = Users.objects.get(id=user_id)
+    Messages.objects.create(user=user_id, message=request.POST['message'])
+    return redirect("/wall")
+
+
+
+#MESSAGES SCROLL
+def message_scroll(request): 
+    context = {
+    	"message_scroll": Messages.objects.all(),
+        
+    }
+    return render(request, "app_wall/index.html", context)
+
+
+#COMMENTS TO WALL FUNCTION
+def comment_post( request):
+    user_id = int(request.session["id"])
+    user_id = Users.objects.get(id=user_id)
+    message_id = int(request.POST["message_id"])
+    message_id = Messages.objects.get(id=message_id)
+    Comments.objects.create(user=user_id, message=message_id, comment=request.POST['comment'])
+    return redirect("/wall")
+
+
+#COMMENTS SCROLL
+def comments_scroll(request): 
+    context = {
+    	"comment_scroll": Comments.objects.all(),
+        
+    }
+    return render(request, "app_wall/index.html", context)
+
+
+#DELETE COMMENTS
+def comments_delete( request, comments_id):
+
+    Comments.objects.get(id = comments_id).delete()
+    return redirect("/wall")
 
 
 # def shows_new(request): 
@@ -13,12 +73,7 @@ def index(request):
 #     return render(request, "shows/index.html")
 
 
-# def shows_all(request): #FUNCTION FOR THR SHOW ALL PAGE
-#     context = {
-#     	"shows_all": Shows.objects.all(),
-#         'store' : Store.objects.all(),
-#     }
-#     return render(request, "shows/shows.html", context)
+
 
 # def checkout(request): #FUNCTION FOR THE CHECKOUT ON THE SHOW ALL MODAL
 #     quantity_from_form = int(request.POST["quantity"])
@@ -61,11 +116,6 @@ def index(request):
 #         Shows.objects.filter(id=request.POST['id']).update(title=request.POST['title'], network=request.POST['network'], release=request.POST['release'], description=request.POST['description'])
 #     return redirect("/shows")
 
-
-
-# def shows_delete( request, shows_id):
-#     Shows.objects.get(id = shows_id).delete()
-#     return redirect("/shows")
 
 
 

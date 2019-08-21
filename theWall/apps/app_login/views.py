@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from .models import *
 from django.contrib import messages
 import bcrypt
@@ -34,7 +34,7 @@ def register(request):
         request.session['users'] = users.first_name
         request.session['id']= users.id
         messages.success(request, "User successfully added.")
-        return redirect("/success")
+        return redirect("/wall")
 
 def login(request):
     request.session.clear()
@@ -50,14 +50,14 @@ def login(request):
             if bcrypt.checkpw(request.POST['password'].encode(), user.password.encode()):
                 request.session['user'] = user.first_name
                 request.session['id'] = user.id
-                return redirect("/success")
+                return redirect("/wall")
             else:
                 messages.error(request,'Wrong Password')
                 return redirect("/login")
         else:
             messages.error(request,'User does not exist, please register')
             return redirect("/login")
-    return redirect("/success")
+    return redirect("/wall")
 
 
 
@@ -66,7 +66,7 @@ def success(request):
         context = {
              "users" : request.session["id"]  
         }
-        return render(request, 'app_login/success.html', context)
+        return redirect("/wall", context)
     except:
         return render(request, 'app_login/denied.html')
         
