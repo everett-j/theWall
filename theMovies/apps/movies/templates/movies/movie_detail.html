@@ -61,7 +61,7 @@
           
           <div class="mb-1 text-muted"></div>
           
-          <a href="#" class="stretched-link">Home</a>
+          <a href="/movies" class="stretched-link">Home</a>
         </div>
        
       </div>
@@ -79,18 +79,28 @@
   <span class="border-bottom my-3"></span>
   {% for review in reviews %}
               
-                <div class="mb-1 text-muted">Rating: &#10035; </div>
+                <div class="mb-1 text-muted">Rating: 
+                    {% if review.rating == 5 %}&#10035;&#10035;&#10035;&#10035;&#10035;{% endif %}
+                    {% if review.rating == 4 %}&#10035;&#10035;&#10035;&#10035;{% endif %}
+                    {% if review.rating == 3 %}&#10035;&#10035;&#10035;{% endif %}
+                    {% if review.rating == 2 %}&#10035;&#10035;{% endif %}
+                    {% if review.rating == 1 %}&#10035;{% endif %}
+                    {% if review.rating == null %}&#10035;{% endif %} 
+                
+                
+                
+                </div>
                 <p class="d-inline">
-                <p class="card-text mb-auto"><a href="#" class="stretched-link">{{review.user.first_name}}</a> says:</p>
+                <p class="card-text mb-auto"><a href="user/{{review.user.id}}" class="stretched-link">{{review.user.first_name}}</a> says:</p>
             {{review.review}}</p>
             <p class="card-text mb-auto">Posted on {{review.created_at}}</p>
-
+            <span class="border-bottom my-3"></span>
             {% if review.user.id == review.id %}
             <p class="card-text mb-auto"><a href="/delete" class="stretched-link">Delete Review</a></p>
             <span class="border-bottom my-3"></span>
             {% endif %}
             {% endfor %} 
-
+            
   <!--END REVIEWS LISTING-->          
               </div>
               <div class="col-auto d-none d-lg-block">
@@ -107,7 +117,7 @@
             <div class="form-group col-md-12">
                 <form action="/movies/add_review" method="POST">
                   {% csrf_token %}
-                  <input type="hidden" value="{{ movies.id }}" name="movie_id">
+                  <input type="hidden" value="{{ movies.id }}" name="movies_id">
                 <textarea class="form-control" name="review"></textarea>
               </div>
             </div>

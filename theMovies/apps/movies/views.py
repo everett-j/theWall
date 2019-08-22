@@ -5,20 +5,24 @@ import bcrypt
     
 def movies(request):
   
-    try:
-        user_id = int(request.session["id"])
-        user_id = Users.objects.get(id=user_id)
-        context = {
-        'review' : Reviews.objects.all(),
-        'users_info' : Users.objects.all(), 
-        'reviews' : Movies.objects.all(),
-
-        }
-        print(context['reviews'][0].title)
-        return render(request, 'movies/index.html', context)
+    # try:
+    user_id = int(request.session["id"])
+    user_id = Users.objects.get(id=user_id)
+    posts = Reviews.objects.all().order_by('-created_at')[:3]
+    more_posts = Movies.objects.all().order_by('-created_at')[3:]
+    context = {
+    "user" : user_id,
+    'review' : Reviews.objects.all(),
+    'users_info' : Users.objects.all(), 
+    'reviews' : Movies.objects.all(),
+    'posts' : posts,
+    'more_posts' : more_posts,
+    }
+    print(context['reviews'][0].title)
+    return render(request, 'movies/index.html', context)
     
-    except:
-        return render(request, 'app_login/denied.html')
+    # except:
+    #     return render(request, 'app_login/denied.html')
 
 
 
@@ -27,8 +31,8 @@ def movie_detail(request, movies_id):
    
     try:
         context = {
-             "users_id" : request.session["id"],
-             'movies' : Movies.objects.get(id = movies_id),
+                "users_id" : request.session["id"],
+                'movies' : Movies.objects.get(id = movies_id),
         'actors' : Movies.objects.get(id = movies_id).actors,
         'users' : Users.objects.all(), 
         'reviews' : Movies.objects.get(id = movies_id).reviews.all()
@@ -41,11 +45,14 @@ def movie_detail(request, movies_id):
 
 
 
-def user_detail(request):
+def user_detail(request, u_id):
     try:
         context = {
-             "users" : request.session["id"]  
-        }
+        "user_id" : request.session["id"],
+        'user' : Users.objects.get(id = u_id),
+        'movie' : Movies.objects.all()
+        } 
+        
         return render(request, 'movies/user_detail.html', context)
     except:
         return render(request, 'app_login/denied.html')
@@ -69,7 +76,8 @@ def add_redirect(request):
 def add_movie(request):
     try:
         context = {
-             "users" : request.session["id"]  
+             "users" : request.session["id"],
+             "actors" : Actors.objects.all()
         }
         return render(request, 'movies/add_movie.html', context)
     except:
@@ -81,11 +89,11 @@ def add_review(request):
     if request.method=="POST":
         user_id = int(request.session["id"])
         user_id = Users.objects.get(id=user_id)
-        movies_id = request.POST['movies_id']
-        Reviews.objects.create(user=user_id, movie={movies_id}, review=request.POST['review'], rating=request.POST['rating'])
+        movies_id = Movies.objects.get(id = request.POST['movies_id'])
+        Reviews.objects.create(user=user_id, movie=movies_id, review=request.POST['review'], rating=request.POST['rating'])
         
         
-        return redirect(f'/movies/{movies_id}')
+        return redirect(f'/movies/{movies_id.id}')
 
 
 def delete_review(request):

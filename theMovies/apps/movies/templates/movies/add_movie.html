@@ -86,7 +86,9 @@
                   <label for="inputAddress">Choose an actor:</label>
                   <select id="inputState" class="form-control">
                       <option selected>Choose...</option>
-                      <option name="name">{{actors.name}}</option>
+                      {% for actor in actors %}
+                      <option name="name">{{actor.name}}</option>
+                      {% endfor %} 
                     </select>
                 </div>
                 <div class="form-group">

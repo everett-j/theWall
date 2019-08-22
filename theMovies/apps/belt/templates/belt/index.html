@@ -19,13 +19,13 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/belt">Belt Exam : Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/wall">The Wall</a>
+                
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/movies">Movie Reviews</a>
+               
               </li>
             </ul>
             <form class="form-inline mt-2 mt-md-0" action="/logout">
@@ -75,9 +75,9 @@
           <div class="col p-4 d-flex flex-column position-static">
             <strong class="d-inline-block mb-2 text-primary">Recent Movie Reviews:</strong>
             <span class="border-bottom my-3"></span>
-            {% for info in posts %}
+            {% for info in review %}
             
-            <strong class="d-inline-block mb-2 text-primary "><a href="{{info.movie.id}}" class="text-secondary">{{info.movie.title}}</a></strong>
+            <strong class="d-inline-block mb-2 text-primary "><a href="{{info.id}}" class="text-secondary">{{info.movie.title}}</a></strong>
             <div class="mb-1 text-muted">Rating:
             {% if info.rating == 5 %}&#10035;&#10035;&#10035;&#10035;&#10035;{% endif %}
             {% if info.rating == 4 %}&#10035;&#10035;&#10035;&#10035;{% endif %}
@@ -105,7 +105,7 @@
           <div class="col p-4 d-flex flex-column position-static">
             <strong class="d-inline-block mb-2 text-success">Other Movies with Reviews:</strong>
             <ul>
-                {% for movie in more_posts %}
+                {% for movie in reviews %}
               <li><a href="/movies/{{movie.id}}">{{movie.title}}</a></li>
               {% endfor %} 
             </ul>

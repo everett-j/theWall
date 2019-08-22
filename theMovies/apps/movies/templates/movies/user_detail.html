@@ -45,10 +45,10 @@
     <div class="col-md-6">
       <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
-          <h3 class="mb-0">User Alias: {{movies.first_name}}</h3>
-          <h5 class="mb-0">Name: {{movies.first_name}} {{movies.last_name}}</h5>
-          <h6 class="mb-0">Email: {{ movies.email }}</h6>
-          <h6 class="mb-0">Total Reviews: {{ movies.reviews }}</h6>
+          <h3 class="mb-0">User Alias: {{user.first_name}}</h3>
+          <h5 class="mb-0">Name: {{user.first_name}} {{user.last_name}}</h5>
+          <h6 class="mb-0">Email: {{user.email}}</h6>
+          <h6 class="mb-0">Total Reviews: {{user.review}}</h6>
 
 
         </div>
@@ -64,7 +64,7 @@
           
           <div class="mb-1 text-muted"></div>
           
-          <a href="#" >Home</a>  <a href="#" >Add Movie and Review</a>
+          <a href="/movies" >Home</a>  <a href="/movies/add" >Add Movie and Review</a>
         </div>
        
       </div>
@@ -77,13 +77,15 @@
       <div class="col-md-6">
         <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
           <div class="col p-4 d-flex flex-column position-static">
-            <strong class="d-inline-block mb-2 text-primary">Posted Reviews on the following movies:</strong>
+            <strong class="d-inline-block mb-2 text-primary">Posted Reviews:</strong>
             <div class="mb-1 text-muted">
 
               <ul>
+                  {% for user_reviews in user.reviews.all %}
                 <li>
-                    <a href="/movies/{{movie.id}}" >{{ movies.title }}</a>
+                    <a href="/movies/{{user_reviews.movie_id}}" >{{user_reviews.review}}</a>
                 </li>
+                {% endfor %} 
               </ul>
 
 
