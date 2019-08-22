@@ -15,8 +15,10 @@ def index(request):
 
 def wall(request):
     try:
+        user_id = int(request.session["id"])
+        user_id = Users.objects.get(id=user_id)
         context = {
-             "users" : request.session["id"],
+             "user" : user_id,
              "message_scroll": Messages.objects.all(),
              "comment_scroll": Comments.objects.all()
         }
