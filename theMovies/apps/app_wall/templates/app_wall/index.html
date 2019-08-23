@@ -28,6 +28,10 @@
         <li class="nav-item">
           <a class="nav-link" href="/movies">Movie Reviews</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/movies/users">User Edit</a>
+          </li>
+
       </ul>
       <form class="form-inline mt-2 mt-md-0" action="/logout">
         
@@ -40,6 +44,7 @@
 <div class="container">
 <div class="lead pt-5"></div>
 <!-- END OF NAVIGATION CONSTANT AREA-->   
+
 
 <!--LEFT SIDE TOP-->     
 <div class="row mb-2">
@@ -60,8 +65,13 @@
     
     
     <div class="mb-1 text-muted"></div>
-    
-    <a href="#" class="stretched-link">This link goes nowhere! </a>
+    {% if infos %}
+<ul class="messages">    
+{% for info in messages %}    
+<li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+{% endfor %}
+</ul>
+{% endif %}
   </div>
  
 </div>
@@ -78,7 +88,7 @@
               <h6 class="p-2">Post a Message</h6>    
           <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-dark rounded shadow-sm">
             
-                <textarea class="form-control input-lg rounded shadow-sm" name="message" rows="3" placeholder="Whats on your mind?"></textarea>
+                <textarea class="form-control input-lg rounded shadow-sm" name="message" rows="3" placeholder="Whats on your mind?" required="required"></textarea>
             
           </div>
           <div class="btn-toolbar justify-content-between">
@@ -136,14 +146,14 @@
               
               <div class="media-body pb-3 border-bottom border-gray">
                 <div class=" justify-content-between align-items-center ">
-                    <form class="needs-validation" novalidate action="/wall/comment_post" method="POST">
+                    <form role="form" data-toggle="validator" class="needs-validation" id="comments" novalidate action="/wall/comment_post" method="POST">
                       {% csrf_token %}
                       <input type="hidden" value= "{{messages.id}}" name="message_id">
                       
                       <h6 class="p-2">Post a Message</h6>    
                 
-                    <textarea class="form-control rounded shadow-sm" name="comment" rows="3"></textarea>
-                
+                    <textarea class="form-control control-label rounded shadow-sm" name="comment" data-minlength="6" data-error="Add something more!" rows="3" required></textarea>
+                    <div class="help-block with-errors">Minimum of 6 characters</div>
                   
                   <div class="btn-toolbar justify-content-between">
                   <div class="btn-group"></div>
@@ -176,6 +186,43 @@
             </small>
           </div> -->
         </main>
+        <script>
+            document.addEventListener('DOMContentLoaded', function(e) {
+                FormValidation.formValidation(
+                    document.getElementById('comments'),
+                    {
+                        fields: {
+                            message: {
+                                validators: {
+                                    notEmpty: {
+                                        message: 'The message is required'
+                                    },
+                                    stringLength: {
+                                        min: 6,
+                                        max: 30,
+                                        message: 'The message must be more than 6 and less than 30 characters long'
+                                    },
+                                    regexp: {
+                                        regexp: /^[a-zA-Z0-9_]+$/,
+                                        message: 'The name can only consist of alphabetical, number and underscore'
+                                    }
+                                }
+                            },
+                           
+                        plugins: {
+                            trigger: new FormValidation.plugins.Trigger(),
+                            bootstrap: new FormValidation.plugins.Bootstrap(),
+                            submitButton: new FormValidation.plugins.SubmitButton(),
+                            icon: new FormValidation.plugins.Icon({
+                                valid: 'fa fa-check',
+                                invalid: 'fa fa-times',
+                                validating: 'fa fa-refresh'
+                            }),
+                        },
+                    }
+                );
+            });
+            </script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>

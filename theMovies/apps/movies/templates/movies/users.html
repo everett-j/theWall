@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>The BELT EXAM</title>
+        <title>ALL USERS: LISTING</title>
         <link href="https://fonts.googleapis.com/css?family=Teko&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Red+Hat+Display&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -19,13 +19,13 @@
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item active">
-                <a class="nav-link" href="/belt">Belt Exam : Home</a>
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
-                
+                <a class="nav-link" href="/wall">The Wall</a>
               </li>
               <li class="nav-item">
-               
+                <a class="nav-link" href="/movies">Movie Reviews</a>
               </li>
             </ul>
             <form class="form-inline mt-2 mt-md-0" action="/logout">
@@ -39,6 +39,8 @@
     <div class="container">
       <div class="lead pt-5"></div>
 <!-- END OF NAVIGATION CONSTANT AREA-->   
+
+<!--ALL USERS LISTING PAGE-->
 
  <!--LEFT SIDE TOP-->     
  <div class="row mb-2">
@@ -60,7 +62,9 @@
           
           <div class="mb-1 text-muted"></div>
           
-          <a href="movies/add" class="stretched-link">Add Movie and Review</a>
+          <button type="button" class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#adduser">
+              Add User
+            </button>
         </div>
        
       </div>
@@ -73,50 +77,104 @@
       <div class="col-md-6">
         <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
           <div class="col p-4 d-flex flex-column position-static">
-            <strong class="d-inline-block mb-2 text-primary">Recent Movie Reviews:</strong>
-            <span class="border-bottom my-3"></span>
-            {% for info in review %}
-            
-            <strong class="d-inline-block mb-2 text-primary "><a href="{{info.id}}" class="text-secondary">{{info.movie.title}}</a></strong>
-            <div class="mb-1 text-muted">Rating:
-            {% if info.rating == 5 %}&#10035;&#10035;&#10035;&#10035;&#10035;{% endif %}
-            {% if info.rating == 4 %}&#10035;&#10035;&#10035;&#10035;{% endif %}
-            {% if info.rating == 3 %}&#10035;&#10035;&#10035;{% endif %}
-            {% if info.rating == 2 %}&#10035;&#10035;{% endif %}
-            {% if info.rating == 1 %}&#10035;{% endif %}
-            {% if info.rating == null %}&#10035;{% endif %}
-           </div>
-            <p class="d-inline"><a href="user/{{info.user.id}}" >{{info.user.first_name}}</a> says:
-            {{info.review}}</p>
-            <p class="card-text mb-auto">Posted on {{info.created_at}}</p>
-            <span class="border-bottom my-3"></span>
-            {% endfor %} 
-            
-           
+            <strong class="d-inline-block mb-2 text-primary">Users in system:</strong>
+            <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                      
+                    <th scope="col">ID</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Options</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                    
+                    {% for users in users_info %}
+                    <tr>
+                    <td>{{users.id}}</td>
+                    <td>{{users.email}}</td>
+                    <td>{{users.first_name}}</td>
+                    <td>{{users.last_name}}</td>
+                    <td><a href="update/{{users.id}}">Edit Info</a></td>
+                  </tr>
+                    {% endfor %} 
+                  
+                  
+                </tbody>
+              </table>
           </div>
           <div class="col-auto d-none d-lg-block">
           </div>
         </div>
       </div>
+<!--ADD USER MODAL BEGIN-->
+<div class="modal fade" id="adduser" tabindex="-1" role="dialog" aria-labelledby="adduser" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="Add User">Add User</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form action="add_new" method="POST">
+              {% csrf_token %}
+                <div class="form-row">
+                  <div class="form-group col-md-6">
+                    <input type="hidden" value="{{users.id}}" name="id">
+                    <label >First Name</label>
+                    <input type="text" class="form-control" name="first_name" >
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label >Last Name</label>
+                    <input type="text" class="form-control" name="last_name" >
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputAddress">Email</label>
+                  <input type="text" class="form-control" name="email" >
+                </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Add User</button>
+<!--ERROR MESSAGE OUTPUT-->
+{% if messages %}
+<ul class="messages">    
+{% for message in messages %}    
+<li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+{% endfor %}
+</ul>
+{% endif %}
+
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--ADD USER MODAL END-->
 
 <!--RIGHT SIDE-->
-      <div class="col-md-6">
+      <!-- <div class="col-md-6">
         <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
           <div class="col p-4 d-flex flex-column position-static">
-            <strong class="d-inline-block mb-2 text-success">Other Movies with Reviews:</strong>
-            <ul>
-                {% for movie in reviews %}
-              <li><a href="/movies/{{movie.id}}">{{movie.title}}</a></li>
-              {% endfor %} 
-            </ul>
-            
+            <strong class="d-inline-block mb-2 text-success">Design</strong>
+            <h3 class="mb-0">Post title</h3>
+            <div class="mb-1 text-muted">Nov 11</div>
+            <p class="mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
+            <a href="#" class="stretched-link">Continue reading</a>
           </div>
           <div class="col-auto d-none d-lg-block">
         </div>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   
   
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect, reverse
 from .models import *
 from django.contrib import messages
 import bcrypt
-    
+
+#MOVIES APP ONLY
+
 def movies(request):
   
     # try:
@@ -105,161 +107,68 @@ def delete_review(request):
     except:
         return render(request, 'app_login/denied.html')
 
+#EXTRA EXTRA - UPDATING DB - ROUTING TO SPECIFIC ID
 
-# def wall(request):
-#     try:
-#         user_id = int(request.session["id"])
-#         user_id = Users.objects.get(id=user_id)
-#         context = {
-#              "user" : user_id,
-#              "message_scroll": Messages.objects.all(),
-#              "comment_scroll": Comments.objects.all()
-#         }
-#         return render(request, 'app_wall/index.html', context)
-#     except:
-#         return render(request, 'app_login/denied.html')
-
-# def add_movies(request):
-#     try:
-#         context = {
-#              "users" : request.session["id"]  
-#         }
-#         return render(request, 'movies/index.html', context)
-#     except:
-#         return render(request, 'app_login/denied.html')
-
-# def movie_page(request):
-#     try:
-#         context = {
-#              "users" : request.session["id"]  
-#         }
-#         return render(request, 'movies/index.html', context)
-#     except:
-#         return render(request, 'app_login/denied.html')
-
-
-# def user_page(request):
-#     try:
-#         context = {
-#              "users" : request.session["id"]  
-#         }
-#         return render(request, 'movies/index.html', context)
-#     except:
-#         return render(request, 'app_login/denied.html')
-
-
-
-
-#POST TO WALL FUNCTION
-# def movies_post( request):
-#     user_id = int(request.session["id"])
-#     user_id = Users.objects.get(id=user_id)
-#     Messages.objects.create(user=user_id, message=request.POST['message'])
-#     return redirect("/movies")
-
-
-
-#MESSAGES SCROLL
-# def message_scroll(request): 
-#     context = {
-#     	"message_scroll": Messages.objects.all(),
-        
-#     }
-#     return render(request, "app_wall/index.html", context)
-
-
-#COMMENTS TO WALL FUNCTION
-# def comment_post( request):
-#     user_id = int(request.session["id"])
-#     user_id = Users.objects.get(id=user_id)
-#     message_id = int(request.POST["message_id"])
-#     message_id = Messages.objects.get(id=message_id)
-#     Comments.objects.create(user=user_id, message=message_id, comment=request.POST['comment'])
-#     return redirect("/wall")
-
-
-#COMMENTS SCROLL
-# def comments_scroll(request): 
-#     context = {
-#     	"comment_scroll": Comments.objects.all(),
-        
-#     }
-#     return render(request, "app_wall/index.html", context)
-
-
-#DELETE COMMENTS
-# def comments_delete( request, comments_id):
-
-#     Comments.objects.get(id = comments_id).delete()
-#     return redirect("/wall")
-
-
-# def shows_new(request): 
+def user_list(request):
   
-#     return render(request, "shows/index.html")
+    try:
+        user_id = int(request.session["id"])
+        user_id = Users.objects.get(id=user_id)
+        posts = Reviews.objects.all().order_by('-created_at')[:3]
+        more_posts = Movies.objects.all().order_by('-created_at')[3:]
+        context = {
+        "user" : user_id,
+        'review' : Reviews.objects.all(),
+        'users_info' : Users.objects.all(), 
+        'reviews' : Movies.objects.all(),
+        'posts' : posts,
+        'more_posts' : more_posts,
+        }
+        print(context['reviews'][0].title)
+        return render(request, 'movies/users.html', context)
+    
+    except:
+        return render(request, 'app_login/denied.html')
+
+
+def user_redirect(request):
+        if request.method=="POST":
+                user_id = int(request.session["id"])
+                u_id = int(request.POST["id"])
+                
+                Users.objects.filter(id=u_id).update(first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'])
+                
+        return redirect('/movies/users')
 
 
 
+def update_user(request, u_id):
+        user_id = int(request.session["id"])
+        user_id = Users.objects.get(id=user_id)
 
-# def checkout(request): #FUNCTION FOR THE CHECKOUT ON THE SHOW ALL MODAL
-#     quantity_from_form = int(request.POST["quantity"])
-#     item = int(request.POST["hidden"])
-#     price_from_form = Store.objects.get(id=item)
-#     total_charge = quantity_from_form * price_from_form.price
-#     print("Charging credit card...")
-#     Order.objects.create(quantity_ordered=quantity_from_form, total_price=total_charge)
-#     return redirect("/receipt")
+        try:
+                context = {
+                "user" : user_id,
+                'users' : Users.objects.get(id = u_id),
+                'review' : Reviews.objects.all(),
+                'users_info' : Users.objects.all(), 
+                'reviews' : Movies.objects.all(),
+                
+                }
+                
+                return render(request, 'movies/update_users.html', context)
+        except:
+                return render(request, 'app_login/denied.html')
 
-# def receipt(request): #LANDING PAGE FOR THE CHECKOUT FUNCTION
-#     total_amount = 0
-#     for x in Order.objects.all():
-#         total_amount += x.total_price
-
-#     context = {
-#     	'orders': Order.objects.last(),
-#         'total': total_amount
-#     }
-
-#     return render(request, "shows/receipt.html", context)
-
-
-# def shows_edit(request, shows_id): 
-#     print ("I am before the if")
-#     context = {
-#         'shows' : Shows.objects.get(id = shows_id),
-#         'all_shows' : Shows.objects.all(),
-#     }
-#     return render(request, "shows/edit.html", context)
-
-# def shows_edit_me( request, shows_id):
-#     errors = Shows.objects.basic_validator(request.POST)
-#         # check if the errors dictionary has anything in it
-#     if len(errors) > 0:
-#         for key, value in errors.items():
-#             messages.error(request, value)
-#         return redirect(f"shows/{shows_id}/edit.html")
-#     else:
-#         Shows.objects.filter(id=request.POST['id']).update(title=request.POST['title'], network=request.POST['network'], release=request.POST['release'], description=request.POST['description'])
-#     return redirect("/shows")
+#ADD NEW USER IN MODAL FUNCTION
+def add_new_user(request):
+        if request.method=="POST":
+                Users.objects.create(first_name=request.POST['first_name'], last_name=request.POST['last_name'], email=request.POST['email'])
+                
+        return redirect('/movies/users')
 
 
 
-
-# def shows_view(request, shows_id): 
-#     context = {
-        
-#         'shows' : Shows.objects.get(id = shows_id),
-#         'all_shows' : Shows.objects.all(),
-#         'store' : Shows.objects.get(id = shows_id),
-#     }
-#     return render(request, "shows/show_detail.html", context)
-
-
-
-# def shows_newbie(request):
-
-#     Shows.objects.create(title=request.POST['title'], network=request.POST['network'], release=request.POST['release'], description=request.POST['description']) 
-#     return redirect("/shows")
 
 # def update(request, id):
 #     # pass the post data to the method we wrote and save the response in a variable called errors

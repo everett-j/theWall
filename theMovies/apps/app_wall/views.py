@@ -28,9 +28,17 @@ def wall(request):
 
 #POST TO WALL FUNCTION
 def wall_post( request):
-    user_id = int(request.session["id"])
-    user_id = Users.objects.get(id=user_id)
-    Messages.objects.create(user=user_id, message=request.POST['message'])
+    errors = Messages.objects.validate_messages(request.POST)
+    if len(errors):
+        for key,value in errors.items():
+            messages.error(request,value, extra_tags="register_error:"+str(key))
+        return redirect("/wall")
+    else:
+        user_id = int(request.session["id"])
+        user_id = Users.objects.get(id=user_id)
+        Messages.objects.create(user=user_id, message=request.POST['message'])
+        
+        messages.success(request, "Message successfully added.")
     return redirect("/wall")
 
 
@@ -46,11 +54,22 @@ def message_scroll(request):
 
 #COMMENTS TO WALL FUNCTION
 def comment_post( request):
-    user_id = int(request.session["id"])
-    user_id = Users.objects.get(id=user_id)
-    message_id = int(request.POST["message_id"])
-    message_id = Messages.objects.get(id=message_id)
-    Comments.objects.create(user=user_id, message=message_id, comment=request.POST['comment'])
+    errors = Comments.objects.validate_comments(request.POST)
+    if len(errors)>0:
+        for key,value in errors.items():
+            messages.error(request,value, extra_tags="register_error:"+str(key))
+            print ("FAIL")
+        return redirect("/wall")
+    
+    else:
+        user_id = int(request.session["id"])
+        user_id = Users.objects.get(id=user_id)
+        message_id = int(request.POST["message_id"])
+        message_id = Messages.objects.get(id=message_id)
+        Comments.objects.create(user=user_id, message=message_id, comment=request.POST['comment'])
+       
+        messages.success(request, "Comment successfully added.")
+        print ("SUCCESS")
     return redirect("/wall")
 
 
