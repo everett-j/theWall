@@ -142,6 +142,7 @@ def user_redirect(request):
 
 
 
+
 def update_user(request, u_id):
         user_id = int(request.session["id"])
         user_id = Users.objects.get(id=user_id)

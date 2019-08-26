@@ -34,7 +34,7 @@ def register(request):
         request.session['users'] = users.first_name
         request.session['id']= users.id
         messages.success(request, "User successfully added.")
-        return redirect("/belt")
+        return redirect("/trips/dashboard")
 
 def login(request):
     request.session.clear()
@@ -50,14 +50,14 @@ def login(request):
             if bcrypt.checkpw(request.POST['password'].encode(), user.password.encode()):
                 request.session['user'] = user.first_name
                 request.session['id'] = user.id
-                return redirect("/belt")
+                return redirect("/trips/dashboard")
             else:
                 messages.error(request,'Wrong Password')
                 return redirect("/login")
         else:
             messages.error(request,'User does not exist, please register')
             return redirect("/login")
-    return redirect("/belt")
+    return redirect("/trips/dashboard")
 
 
 
@@ -66,7 +66,7 @@ def success(request):
         context = {
              "users" : request.session["id"]  
         }
-        return redirect("/belt", context)
+        return redirect("/trips/dashboard", context)
     except:
         return render(request, 'app_login/denied.html')
         

@@ -12,3 +12,7 @@
 color: red;
 font-size: 20px;
 }
+
+.ui-draggable, .ui-droppable {
+	background-position: top;
+}
