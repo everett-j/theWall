@@ -1,0 +1,126 @@
+<html>
+    <head>
+        <title>Exam 2</title>
+        <link href="https://fonts.googleapis.com/css?family=Teko&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Red+Hat+Display&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/jquery/1.12.4/jquery.min.js" ></script>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'app_two/css/style.css' %}">    
+        <script src="{% static 'app_two/js/script.js' %}"></script>        
+    </head>
+    <body>
+<!-- BEGIN OF NAVIGATION CONSTANT AREA-->         
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark mb-5">
+          <a class="navbar-brand" href="#">Everett</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/trips/dashboard">Belt Exam : Home</a>
+              </li>
+              <li class="nav-item">
+                
+              </li>
+              <li class="nav-item">
+               
+              </li>
+            </ul>
+            <form class="form-inline mt-2 mt-md-0" action="/logout">
+              
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sign Out</button>
+            </form>
+          </div>
+        </nav>
+  
+    
+    <div class="container">
+      <div class="lead pt-5"></div>
+<!-- END OF NAVIGATION CONSTANT AREA-->   
+
+ <!--LEFT SIDE TOP-->     
+ <div class="row mb-2">
+    <div class="col-md-6">
+      <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <h3 class="mb-0">Hello, {{user.first_name}}!</h3>
+<h1>DELETE THIS LINE - EXAM BELT 2</h1>
+        </div>
+       
+      </div>
+    </div>
+
+<!--RIGHT SIDE TOP-->
+    <div class="col-md-6">
+      <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          
+          
+          <div class="mb-1 text-muted"></div>
+          
+          <a href="/trips/new" class="stretched-link">Create a new trip!</a>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+
+
+ <!--LEFT SIDE -->     
+    <div class="row mb-2">
+      <div class="col-md-12">
+        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+          <div class="col p-6 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-primary">Your trips:</strong>
+            
+            
+            
+            <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Start Date</th>
+                    <th scope="col">End Date</th>
+                    <th scope="col">Plan</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!--INSERT IF -->{% for info in trips %}
+                  <tr>
+                      <td><a href="/trips/{{info.id}}">{{info.destination}}</a></td>
+                    <td>{{info.start_date}}</td>
+                    <td>{{info.end_date}}</td>
+                    <td>{{info.plan}}</td>
+
+  <!--ONLY ALLOW USER TO EDIT/DELETE IF THEY CREATED-->                  
+                      <td>
+                        {% if info.user.id == user.id %}
+                      <a href="/trips/delete/{{info.id}}">Remove</a> | {% endif %}<a href="/trips/edit/{{info.id}}">Edit</a></td>
+                  </tr>
+                  <!--CLOSE IF--> {% endfor %}
+                </tbody>
+              </table>
+            
+           
+          </div>
+          <div class="col-auto d-none d-lg-block">
+          </div>
+        </div>
+      </div>
+
+<!--RIGHT SIDE-->
+
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js" ></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>

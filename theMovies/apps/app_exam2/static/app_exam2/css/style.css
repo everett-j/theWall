@@ -1,0 +1,18 @@
+
+
+
+.go_back_button{
+  vertical-align: top;
+  display: inline-block;
+  margin-left: 600px;
+}
+
+
+.error_red{
+color: red;
+font-size: 20px;
+}
+
+.ui-draggable, .ui-droppable {
+	background-position: top;
+}

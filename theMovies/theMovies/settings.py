@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'apps.app_login', # added this line. Don't forget the comma!!
     'apps.movies', # added this line. Don't forget the comma!!
     'apps.belt', # added this line. Don't forget the comma!!
+    'apps.app_two', # added this line. Don't forget the comma!!
+    'apps.app_exam2', # added this line. Don't forget the comma!!
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

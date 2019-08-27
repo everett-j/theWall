@@ -3,18 +3,17 @@ from apps.app_login.models import *
 from apps.app_wall.models import *
 from apps.movies.models import *
 from apps.belt.models import *
+from apps.app_two.models import *
 from django.contrib import messages
 import bcrypt
 
-#BELT EXAM VIEWS
+#EXAM 2 VIEWS - TUESDAY
 
 def redirect_home(request):
                        
         return redirect('/trips/dashboard')
 
-def cancel_redirect(request):
-                       
-        return redirect('/trips/dashboard')
+
 
 ##HOME PAGE ##SORTED BY CREATED DATE
 def belt(request):
@@ -30,10 +29,15 @@ def belt(request):
 
     }
 
-        return render(request, 'belt/index.html', context)
+        return render(request, 'app_two/index.html', context)
     except:
         return render(request, 'app_login/denied.html')
 
+
+### CANCEL BUTTON FUNCTION
+def cancel_redirect(request):
+                       
+        return redirect('/trips/dashboard')
 
 
 ####### WITH VALIDATION  ADD NEW TRIP #########
@@ -67,7 +71,7 @@ def edit_trip(request, t_id):
     
         'trips' : Trips.objects.filter(id = t_id)
         }
-        return render(request, 'belt/edit_trip.html', context)
+        return render(request, 'app_two/edit_trip.html', context)
     except:
         return render(request, 'app_login/denied.html')
 
@@ -99,7 +103,7 @@ def detail_trip(request, t_id):
 
         'trips' : Trips.objects.all()
         }
-        return render(request, 'belt/detail_trip.html', context)
+        return render(request, 'app_two//detail_trip.html', context)
     except:
         return render(request, 'app_login/denied.html')
 
@@ -116,6 +120,6 @@ def add_trip(request):
         'users_info' : Users.objects.all(), 
         'reviews' : Movies.objects.all(),
         }
-        return render(request, 'belt/new_trip.html', context)
+        return render(request, 'app_two/new_trip.html', context)
     except:
         return render(request, 'app_login/denied.html')
